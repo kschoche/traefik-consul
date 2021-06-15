@@ -1,0 +1,10 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: traefik-whoami
+spec:
+  destination:
+    name: whoami
+  sources:
+    - name: traefik
+      action: allow

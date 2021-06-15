@@ -1,0 +1,54 @@
+# Configure Traefik static configuration
+# Additional arguments to be passed at Traefik's binary
+# All available options available on https://docs.traefik.io/reference/static-configuration/cli/
+## Use curly braces to pass values: `helm install --set="additionalArguments={--providers.kubernetesingress.ingressclass=traefik-internal,--log.level=DEBUG}"`
+additionalArguments:
+  - "--entrypoints.web.proxyprotocol.insecure=true"
+  - "--entrypoints.web.proxyprotocol=true"
+  - "--entrypoints.websecure.proxyprotocol.insecure=true"
+  - "--entrypoints.websecure.proxyprotocol=true"
+  - "--metrics.prometheus=true"
+# Use ingressClass. Ignored if Traefik version < 2.3 / kubernetes < 1.18.x
+ingressClass:
+  enabled: true
+# Create an IngressRoute for the dashboard
+ingressRoute:
+  dashboard:
+    enabled: true
+# Logs
+# https://docs.traefik.io/observability/logs/
+logs:
+  access:
+    enabled: true
+# Configure ports
+ports:
+  # The name of this one can't be changed as it is used for the readiness and
+  # liveness probes, but you can adjust its config to your liking
+  web:
+    tls:
+      enabled: false
+  websecure:
+    tls:
+      enabled: false
+#
+# Configure providers
+#
+#providers:
+  #kubernetesIngress:
+    # Published Kubernetes Service to copy status from to ingress object.
+    # Update ingress endpoint IP to be service load balancer's IP.
+  #  publishedService:
+   #   enabled: true
+# Whether Role Based Access Control objects like roles and rolebindings should be created
+rbac:
+  enabled: true
+  namespaced: false
+  serviceAccount:
+    name: "traefik"
+
+# Annotations to add to the deployed services
+deployment:
+  podAnnotations:
+    consul.hashicorp.com/connect-inject: "true"
+    consul.hashicorp.com/transparent-proxy-exclude-inbound-ports: "8000,80,443,9000,8443" 
+    consul.hashicorp.com/transparent-proxy-exclude-outbound-cidrs: "10.108.0.1/32"
