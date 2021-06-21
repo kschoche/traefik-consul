@@ -50,5 +50,5 @@ rbac:
 deployment:
   podAnnotations:
     consul.hashicorp.com/connect-inject: "true"
-    consul.hashicorp.com/transparent-proxy-exclude-inbound-ports: "8000,80,443,9000,8443" 
+    consul.hashicorp.com/transparent-proxy-exclude-inbound-ports: "80,8000,9000,8443"
     consul.hashicorp.com/transparent-proxy-exclude-outbound-cidrs: "10.108.0.1/32"
