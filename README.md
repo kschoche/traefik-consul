@@ -10,7 +10,7 @@ This is a basic consul installation pointed at 1.10-beta4, and should be updated
 ```yaml
 global:
   imageK8S: kschoche/consul-k8s-dev
-  image: hashicorp/consul:1.10.0-beta4 
+  image: hashicorp/consul:1.10.0-rc2 
   tls:
     enabled: true
   acls:
@@ -58,20 +58,8 @@ kubernetes   ClusterIP   10.108.0.1   <none>        443/TCP   5d19h
 
 * Add a service default entry that enables DialedDirectly to the whoami app:
 ```yaml
-Kind = "service-defaults"
-Name = "whoami"
-TransparentProxy {
-  DialedDirectly = true
-}
+kubectl apply -f whoami-crd.yaml
 ```
-```
-export CONSUL_HTTP_ADDR=https://localhost:8501
-export CONSUL_HTTP_SSL_VERIFY=false
-export CONSUL_HTTP_TOKEN=$(kubectl get secret consul-consul-bootstrap-acl-token -o jsonpath={.data.token} | base64 -D)
-kubectl port-forward consul-consul-server-0 8501 &
-consul config write whoami-defaults.hcl
-```
-Note: a CRD will soon be available for this step.
 
 At this point if you try to curl the backend whoami service through the ingress gw you will be rejected due to lack of intentions:
 ```
