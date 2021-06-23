@@ -1,6 +1,6 @@
 global:
-  imageK8S: kschoche/consul-k8s-dev 
-  image: hashicorp/consul:1.10.0-rc2 
+  imageK8S: hashicorp/consul-k8s:0.26.0 
+  image: hashicorp/consul:1.10.0 
   tls:
     enabled: true
   acls:
