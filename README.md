@@ -2,15 +2,13 @@
 
 This is a basic installation of Consul and Traefik which uses Consul to transparently proxy traffic from the Ingress GW to the backend services using mTLS. It uses the simple `whoami` demo from traefik as an example backend service that we will curl through the ingress gw.
 
-~NOTE:  Until we GA 1.10 bits, use main branch instead
-
 * Install Consul: `helm install consul hashicorp/consul --version=0.26.0 consul-values.yaml`
 
-This is a basic consul installation pointed at 1.10-beta4, and should be updated to GA version of 1.10 and consul-k8s when its available.
+This is a basic demo consul installation using 1.10 GA bits.
 ```yaml
 global:
-  imageK8S: kschoche/consul-k8s-dev
-  image: hashicorp/consul:1.10.0-rc2 
+  imageK8S: hashicorp/consul-k8s
+  image: hashicorp/consul:1.10.0
   tls:
     enabled: true
   acls:
@@ -54,12 +52,11 @@ kubernetes   ClusterIP   10.108.0.1   <none>        443/TCP   5d19h
 
 * Once traefik is deployed and online, install the whoami-deployment: `kubectl apply -f whoami-deployment.yaml`
 
-* Apply the ingress resource: `kubectl apply -f ingress-web.yaml` 
+* Apply the ingress resource:
+ `kubectl apply -f ingress-web.yaml`
 
 * Add a service default entry that enables DialedDirectly to the whoami app:
-```yaml
-kubectl apply -f whoami-crd.yaml
-```
+`kubectl apply -f whoami-crd.yaml`
 
 At this point if you try to curl the backend whoami service through the ingress gw you will be rejected due to lack of intentions:
 ```
